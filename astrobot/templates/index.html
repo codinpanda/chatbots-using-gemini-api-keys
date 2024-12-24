@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+    <title>AstroBot</title>
+</head>
+<body>
+    <!-- Starry Sky Background -->
+    <div class="background-animation"></div>
+
+    <!-- Logo at Top-Left -->
+    <div class="logo-container">
+        <img src="/static/logo.png" alt="AstroBot Logo" class="logo">
+        <h1>AstroBot</h1>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container">
+        <!-- Chatbox Header -->
+        <div class="chatbox-header">
+            <h2>Ask about the Cosmos!</h2>
+        </div>
+
+        <!-- Chat Window Section -->
+        <main class="chat-window" id="chat-window">
+            <div id="messages"></div>
+        </main>
+
+        <!-- Input Section -->
+        <footer class="chatbot-input">
+            <form id="chat-form">
+                <input type="text" id="user-input" placeholder="Ask me about the cosmos..." autocomplete="off" required>
+                <button type="submit">Send</button>
+            </form>
+        </footer>
+    </div>
+
+    <!-- Footer Contact Information -->
+    <footer class="page-footer">
+        <p>About AstroBot: Your Cosmic Companion for exploring the universe.</p>
+        <div class="contact-details">
+            <a href="mailto:astrobot@example.com">Email</a>
+            <a href="https://github.com/astrobot" target="_blank">GitHub</a>
+            <a href="https://linkedin.com/in/astrobot" target="_blank">LinkedIn</a>
+        </div>
+    </footer>
+
+    <script>
+        const chatForm = document.getElementById("chat-form");
+        const userInput = document.getElementById("user-input");
+        const messages = document.getElementById("messages");
+        const chatWindow = document.getElementById("chat-window");
+        function scrollToBottom() {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+        chatForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const userMessage = userInput.value.trim();
+            if (userMessage) {
+                appendMessage("user", userMessage);
+                userInput.value = "";
+                try {
+                    const response = await fetch("/get_response", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ message: userMessage }),
+                    });
+                    const data = await response.json();
+                    displayBotResponse(data.response);
+                } catch (error) {
+                    appendMessage("bot", "An error occurred. Please try again.");
+                }
+            }
+        });
+        function appendMessage(sender, message) {
+            const messageContainer = document.createElement("div");
+            messageContainer.classList.add("message-container", sender);
+
+            if (sender === "bot") {
+                const botAvatar = document.createElement("img");
+                botAvatar.src = "/static/bot-avatar.png";
+                botAvatar.alt = "Bot Avatar";
+                botAvatar.classList.add("avatar");
+                messageContainer.appendChild(botAvatar);
+            }
+            const messageDiv = document.createElement("div");
+            messageDiv.classList.add("message");
+            messageDiv.textContent = sender === "user" ? message : "";
+            messageContainer.appendChild(messageDiv);
+            messages.appendChild(messageContainer);
+            scrollToBottom();
+            return messageDiv;
+        }
+        function displayBotResponse(botMessage) {
+            const messageDiv = appendMessage("bot", "");
+            let index = 0;
+
+            const typingInterval = setInterval(() => {
+                if (index < botMessage.length) {
+                    messageDiv.textContent += botMessage.charAt(index);
+                    index++;
+                    scrollToBottom();
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>

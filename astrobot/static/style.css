@@ -1,0 +1,212 @@
+/* Reset */
+body, html, div, h1, p, input, button, form, img, a {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #000; /* Solid black base */
+    overflow: hidden;
+    color: #ffffff;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+/* Cosmic Starry Background with Red, Black, and Blue Gradient (6:3:1 ratio) */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.8) 10%, rgba(0, 0, 0, 0.9) 60%, rgba(0, 0, 255, 0.8) 100%);
+    overflow: hidden;
+    z-index: -1;
+}
+/* Nebula-like Cosmic Background Animation */
+.background-animation::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background-image: radial-gradient(2px circle, rgba(255, 255, 255, 0.8) 1%, transparent 20%),
+                      radial-gradient(2px circle, rgba(255, 255, 255, 0.6) 1%, transparent 40%),
+                      radial-gradient(2px circle, rgba(255, 255, 255, 0.4) 1%, transparent 60%),
+                      radial-gradient(2px circle, rgba(255, 255, 255, 0.2) 1%, transparent 80%);
+    background-size: 60px 60px, 80px 80px, 100px 100px, 130px 130px; /* Smaller stars for more cosmic feel */
+    animation: cosmic-stars 60s linear infinite, nebula-animation 200s linear infinite;
+    opacity: 1;
+}
+
+/* Animation for Cosmic Stars Movement */
+@keyframes cosmic-stars {
+    from {
+        transform: translate(0%, 0%);
+    }
+    to {
+        transform: translate(100%, 100%);
+    }
+}
+/* Nebula Animation to give glowing cosmic effect */
+@keyframes nebula-animation {
+    0% {
+        background-position: 0 0, 10% 10%, 50% 50%, 70% 70%;
+    }
+    50% {
+        background-position: 50% 50%, 30% 30%, 80% 80%, 40% 40%;
+    }
+    100% {
+        background-position: 100% 100%, 60% 60%, 90% 90%, 80% 80%;
+    }
+}
+/* Logo Styling */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 100px;  /* Increased size */
+    height: 100px; /* Increased size */
+    border-radius: 50%;
+    margin-right: 10px; /* Space between logo and title */
+}
+
+h1 {
+    font-size: 36px;
+    color: #e94560;
+    font-weight: bold;
+}
+/* Chatbot Container */
+.chatbot-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    height: 80%;
+    margin: auto;
+    background: linear-gradient(to bottom, #121212, #333);
+    border-radius: 10px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;  /* Ensure no content overflows */
+}
+/* Chatbox Header */
+.chatbox-header {
+    background: #222;
+    padding: 20px;
+    text-align: center;
+    color: #e94560;  /* Applied the same color as the title */
+    font-size: 22px;
+    font-weight: bold;
+    border-bottom: 2px solid #444;
+    flex: 1;  /* This now takes 10% of the space */
+}
+/* Chat Window */
+.chat-window {
+    flex: 9;  /* This now takes 90% of the space */
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+/* Footer Section */
+.page-footer {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: #bbbbbb;
+    font-size: 14px;
+}
+.contact-details a {
+    color: #e94560;
+    text-decoration: none;
+    margin: 0 10px;
+}
+.contact-details a:hover {
+    text-decoration: underline;
+}
+/* Input Section */
+.chatbot-input {
+    display: flex;
+    padding: 10px;
+    background: #1a1a1a;
+    border-top: 1px solid #444;
+}
+form {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+}
+#user-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background: #333;
+    color: #fff;
+}
+button {
+    padding: 10px 20px;
+    background: #e94560;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+button:hover {
+    background: #f05a7a;
+}
+/* Message Styling */
+.message-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    max-width: 90%;
+    margin-bottom: 10px;
+}
+.message-container.user {
+    justify-content: flex-end;
+}
+
+.message-container.bot {
+    justify-content: flex-start;
+}
+.message-container .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 5px;
+}
+.message {
+    max-width: 75%;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 16px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}
+.message.user {
+    background-color: #4e8dff;
+    color: #fff;
+    border-radius: 15px 15px 0 15px;
+}
+.message.bot {
+    background-color: #333;
+    color: #fff;
+    border-radius: 15px 15px 15px 0;
+}
