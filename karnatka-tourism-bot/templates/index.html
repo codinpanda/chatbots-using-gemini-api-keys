@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karnataka Tourism Help Bot</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="chat-container">
+        <header class="chat-header">
+            <img src="/static/logo.png" alt="Logo" class="logo">
+            <h1>Karnataka Tourism Help Bot</h1>
+        </header>
+        <main id="chat-window">
+            <div id="chat-content"></div>
+        </main>
+        <footer class="chat-footer">
+            <form id="chat-form">
+                <textarea id="user-input" placeholder="Ask about Karnataka tourism..." rows="1"></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </footer>
+    </div>
+    <script>
+        const form = document.getElementById('chat-form');
+        const chatContent = document.getElementById('chat-content');
+        const userInput = document.getElementById('user-input');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            appendMessage('user', message);
+
+            userInput.value = '';
+            userInput.style.height = 'auto';
+
+            const response = await fetch('/get_response', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message }),
+            });
+            const data = await response.json();
+
+            await renderTypingEffect(data.response);
+        });
+
+        userInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        function appendMessage(sender, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            if (sender === 'bot') {
+                const avatar = document.createElement('img');
+                avatar.src = '/static/bot-avatar.png';
+                avatar.alt = 'Bot Avatar';
+                avatar.className = 'avatar';
+                messageDiv.appendChild(avatar);
+            }
+            const textDiv = document.createElement('div');
+            textDiv.className = 'text';
+            textDiv.textContent = text;
+            messageDiv.appendChild(textDiv);
+            chatContent.appendChild(messageDiv);
+            chatContent.scrollTop = chatContent.scrollHeight;
+        }
+
+        async function renderTypingEffect(text) {
+            const botMessageDiv = document.createElement('div');
+            botMessageDiv.className = 'message bot';
+            
+            const avatar = document.createElement('img');
+            avatar.src = '/static/bot-avatar.png';
+            avatar.alt = 'Bot Avatar';
+            avatar.className = 'avatar';
+            botMessageDiv.appendChild(avatar);
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'text';
+            botMessageDiv.appendChild(textDiv);
+            chatContent.appendChild(botMessageDiv);
+
+            let displayedText = '';
+            for (const char of text) {
+                displayedText += char;
+                textDiv.textContent = displayedText;
+                chatContent.scrollTop = chatContent.scrollHeight;
+                await new Promise((resolve) => setTimeout(resolve, 30));
+            }
+        }
+    </script>
+</body>
+</html>
