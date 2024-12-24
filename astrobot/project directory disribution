@@ -4,4 +4,4 @@ project/
 │   └── index.html         # The main HTML file
 ├── static/                # Directory for static assets (CSS, JS, images)
 │   ├── style.css          # Optional: CSS file for styling
-│   └── any other static files
+│   └── any other static files(could be logos and other images)
