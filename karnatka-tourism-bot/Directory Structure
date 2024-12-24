@@ -1,0 +1,8 @@
+project/
+├── app.py
+├── templates/
+│   └── index.html
+├── static/
+│   ├── styles.css
+│   ├── logo.png
+│   └── bot-avatar.png
